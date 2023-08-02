@@ -1,10 +1,32 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { createEvent, createStore } from 'effector';
+import { useStore } from 'effector-react';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+const App = () => {
+  const updateEvent = createEvent<number>();
+  const $counter = createStore(0).on(updateEvent, (state, payload) => state + payload);
+
+  const Counter = () => {
+    const count = useStore($counter);
+    return (
+      <div>
+        Count: {count}
+        <button onClick={() => updateEvent(1)}>Increase</button>
+      </div>
+    );
+  };
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <>
+          <Route path="/" element={<Counter />} />
+        </>
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+const root = createRoot(document.getElementById('root')!);
+root.render(<App />);
