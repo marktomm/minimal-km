@@ -18,5 +18,10 @@ export namespace BackendApi {
     postId: number;
   }
 
+  export interface DateData {
+    topic: string;
+    date: string;
+  }
+
   export interface GetResponse extends SuccessResponse<SimpleGetData> {}
 }
