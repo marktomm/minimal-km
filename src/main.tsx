@@ -1,7 +1,8 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { createEvent, createStore } from 'effector';
-import { useStore } from 'effector-react';
+import { useStore, useGate } from 'effector-react';
+import { $storeVar, ComponentLoadedGate } from '../src/_store/backend';
 
 const App = () => {
   const updateEvent = createEvent<number>();
@@ -9,8 +10,11 @@ const App = () => {
 
   const Counter = () => {
     const count = useStore($counter);
+    useGate(ComponentLoadedGate);
+    const store = useStore($storeVar);
     return (
       <div>
+        PostId: {store?.postId}
         Count: {count}
         <button onClick={() => updateEvent(1)}>Increase</button>
       </div>
